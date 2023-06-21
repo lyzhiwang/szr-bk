@@ -42,7 +42,8 @@ const service = axios.create({
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    'type': '1' // 1后台2桌面端
   }
 })
 

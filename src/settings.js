@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'admin-template',
+  title: '数字人',
 
   /**
    * @type {boolean} true | false

@@ -95,11 +95,11 @@ export default {
     }),
     dropdown() {
       var menu = [
-        { to: '/user/password', label: '修改密码' },
-        { to: '/user/wx', label: '微信绑定' }
+        { to: '/user/password', label: '修改密码' }
+        // { to: '/user/wx', label: '微信绑定' }
       ]
       var info = [
-        { to: '/user/info', label: '个人信息' }
+        // { to: '/user/info', label: '个人信息' }
       ]
       if ([1, 5, 7, 8, 9].includes(this.roles[0])) {
         return info.concat(menu)

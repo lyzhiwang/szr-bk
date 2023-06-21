@@ -1,7 +1,7 @@
 <template>
   <div class="file-manager">
     <!-- 展示框 -->
-    <div v-if="fileType === 'audio'" class="music">
+    <div v-if="type === 1" class="music">
       <el-input v-model="value.name" disabled clearable placeholder="请设置音乐">
         <template #append>
           <el-button :disabled="disabled" @click="toggleDialog">选择文件</el-button>
@@ -32,7 +32,7 @@
 
       <div class="content">
         <!-- 音乐 -->
-        <template v-if="fileType === 'audio' && list && list.length">
+        <template v-if="type === 1 && list && list.length">
           <div v-for="(item, index) in list" :key="index" :class="['img-box', 'music', select.index === index ? 'img-box-border' : '']" @dblclick="changeItem(item, index)" @touchend="changeItem(item, index)" @mouseover="mouserOver(item, index)">
             <p :title="item.name" class="ellipsis">{{ item.name }}</p>
             <p>{{ item.add_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</p>
@@ -45,8 +45,10 @@
             <div class="img-info ellipsis">
               <p :title="item.name" class="name ellipsis">{{ item.name }}</p>
               <p>
-                <span>{{ item.size | fileSize }}</span>
-                <span>{{ item.add_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                <!-- <span>{{ item.size | fileSize }}</span> -->
+                <span>{{ item.size }}</span>
+                <span> - </span>
+                <span>{{ item.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
               </p>
             </div>
           </div>
@@ -59,7 +61,7 @@
 
       <!-- 翻页 -->
       <div class="foot">
-        <el-upload :auto-upload="!hasWatermark" :action="upload_url" :data="params" :headers="headers" :before-upload="beforeUpload" :on-change="changeUpload" :on-success="handleSuccess" :on-error="handleError" :show-file-list="false">
+        <el-upload :auto-upload="!isInfo" :action="upload_url" :data="params" :headers="headers" :before-upload="beforeUpload" :on-change="changeUpload" :on-success="handleSuccess" :on-error="handleError" :show-file-list="false">
           <el-button type="primary" size="mini" class="el-icon-upload">本地上传</el-button>
         </el-upload>
         <el-button size="mini" @click="nextPage">下一页</el-button>
@@ -91,9 +93,16 @@ export default {
   props: {
     /**
      * type
-     * 1图片，
-     * 2完整视频，
-     * 3素材视频
+     * 1音乐，
+     * 2顶部背景，
+     * 3公众号二维码，
+     * 4富文本框，
+     * 6用户信息（需要加水印 所以手动上传上传），
+     * 7商品图，
+     * 8分享图片，
+     * 9用户头像，
+     * 10 首屏广告，
+     * 12 霸屏广告
      */
     type: {
       type: Number,
@@ -115,20 +124,10 @@ export default {
       type: Boolean,
       default: false
     },
-    // 上传至安全的服务器地址
-    uploadSafe: {
-      type: Boolean,
-      default: false
-    },
-    // 是否添加水印 加水印后则不自动上传
-    hasWatermark: {
-      type: Boolean,
-      default: false
-    },
-    // 水印添加文字
-    text: {
+    // 仅用于 type=6 用户信息上传 添加水印信息
+    watermark: {
       type: String,
-      default: '该证件仅用于*****使用,15个字'
+      default: '该证件仅用于数字人使用'
     }
   },
   data() {
@@ -144,8 +143,8 @@ export default {
   computed: {
     params: function() {
       const config = this.$store.state.config
-      const token = config[this.fileType + 'Token']
-      if (config.auto_open && !this.uploadSafe) {
+      const token = this.type === 1 ? config.audioToken : config.imgToken
+      if (config.auto_open && this.type !== 6) {
         return {
           token: token,
           'x:type': this.type
@@ -159,21 +158,34 @@ export default {
     },
     fileType() {
       const fileType = {
-        1: 'img', // 图片
-        2: 'video', // 完整视频
-        3: 'video' // 素材视频
+        1: 'audio', // 音乐
+        2: 'img', // 顶部背景
+        3: 'img', // 公众号二维码
+        4: 'img', // 富文本框
+        6: 'img', // 用户信息（需要加水印 所以手动上传上传）
+        7: 'img', // 商品图
+        8: 'img', // 分享图片
+        9: 'img', // 用户头像
+        10: 'img', // 首屏广告
+        12: 'img', // 霸屏广告
+        13: 'video' // 视频
       }
       return fileType[this.type]
     },
     upload_url: function() {
-      // uploadSafe 必须上传服务器，不上传七牛
+      // 用户信息（身份证，营业执照）必须上传服务器，不上传七牛
       const config = this.$store.state.config
-      return config.auto_open && !this.uploadSafe ? config.upload_url : config.local_url
+      if (config.auto_open) return (this.type === 6) ? config.local_url : config.upload_url
+      else return config.local_url
     },
     headers: function() {
       return {
         Authorization: 'Bearer ' + getToken()
       }
+    },
+    // 用户信息需要加水印所以需要手动上传
+    isInfo: function() {
+      return this.type === 6
     }
   },
   watch: {
@@ -190,7 +202,7 @@ export default {
     }
   },
   created() {
-    if (this.$store.state.config.auto_open && !this.uploadSafe) this.$store.dispatch('config/GetQiniuToken', { file_type: this.fileType })
+    if (this.isQiniu) this.$store.dispatch('config/GetQiniuToken', { file_type: this.fileType })
   },
   methods: {
     // 所选值发生改变
@@ -226,7 +238,7 @@ export default {
       }
     },
     nextPage() {
-      const can = Math.ceil(this.total / (this.fileType === 'audio' ? 16 : 8))
+      const can = Math.ceil(this.total / (this.type === 1 ? 16 : 8))
       if (can <= this.page) {
         this.$message({
           type: 'info',
@@ -282,16 +294,16 @@ export default {
         const sizeStr = this.size < 1024 ? this.size + 'KB' : (this.size / 1024) + 'MB'
         this.$message.error('文件大小不能超过 ' + sizeStr + '!')
       }
-      const isJPG = this.fileType === 'audio' ? (file.type === 'audio/mp3' || file.type === 'audio/mpeg') : (file.type === 'image/jpeg') || (file.type === 'image/png')
+      const isJPG = this.type === 1 ? (file.type === 'audio/mp3' || file.type === 'audio/mpeg') : (file.type === 'image/jpeg') || (file.type === 'image/png')
       if (!file.type || !isJPG) {
-        const msg = this.fileType === 'audio' ? 'mp3 格式' : ' JPG 或 PNG 格式!'
+        const msg = this.type === 1 ? 'mp3 格式' : ' JPG 或 PNG 格式!'
         this.$message.error('上传文件只能是' + msg)
       }
       return isJPG && isLt2M
     },
-    // 自动上传需要触发的事件 change事件触发 用户信息相关图片水印需要加水印故需要手动上传
+    // change事件触发 用户信息相关图片水印需要加水印故需要手动上传
     changeUpload(file) {
-      if (this.hasWatermark) {
+      if (this.isInfo) {
         // 校验格式
         if (this.beforeUpload(file.raw)) {
           // 添加水印
@@ -312,7 +324,7 @@ export default {
           this.imgList = [{ url: imgurl }]
           resolve(imgurl)
         }, {
-          cwOption: { text: this.text },
+          cwOption: { text: this.watermark },
           imgOption: { size: 1600 } // 图片宽高不超过这个大小 单位为像素
         })
       })
@@ -323,7 +335,8 @@ export default {
       for (var key in this.params) {
         formData.append(key, this.params[key])
       }
-      formData.append('file', file)
+      if (this.isInfo) formData.append('file', file)
+      else formData.append('file', file.raw, file.name)
       request({
         baseURL: '',
         url: this.upload_url,
@@ -351,6 +364,20 @@ export default {
       })
       // 转换成成blob对象
       // return new Blob([u8arr],{type:mime});
+    },
+    getCurrentTime() {
+      const date = new Date()
+      const m = date.getMonth() + 1
+      const d = date.getDate()
+      const h = date.getHours()
+      const mi = date.getMinutes()
+      const s = date.getSeconds()
+      var month = (m >= 1 || m <= 9) ? '0' + m : m
+      var day = (d >= 0 && d <= 9) ? '0' + d : d
+      var hour = (h >= 0 && h <= 9) ? '0' + h : h
+      var minute = (mi >= 0 && mi <= 9) ? '0' + mi : mi
+      var second = (s >= 0 && s <= 9) ? '0' + s : s
+      return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
     }
   }
 }

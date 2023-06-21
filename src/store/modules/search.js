@@ -15,6 +15,22 @@ const state = {
       size: 10, // 每页显示条目个数
       page: 1 // 当前页数
     }
+  },
+
+  //
+  banner: {
+    otherSearch: {
+      keywords: ''
+    },
+    formSearch: {
+      type: ''
+      // platform_type: 1
+    },
+    pagination: {
+      total: 0, // 总条数
+      size: 10, // 每页显示条目个数
+      page: 1 // 当前页数
+    }
   }
 }
 

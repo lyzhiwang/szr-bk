@@ -44,6 +44,47 @@ export function apiBtn(name, data) {
   return request(r)
 }
 
+// 按钮请求封装   修改 patch 追加 id
+export function apiBtnTwo(name, data) {
+  // 未传递请求方法名称
+  if (!name) {
+    Message({
+      message: '按钮名称未传递',
+      type: 'error',
+      duration: 5 * 1000
+    })
+    return Promise.reject('按钮名称未传递')
+  }
+  // 获取请求内容
+
+  var o = store.getters.permissionBtn[name]
+  if (!o || !o.api || !o.method) {
+    Message({
+      message: name + '不存在',
+      type: 'error',
+      duration: 5 * 1000
+    })
+    return Promise.reject('API或请求方式不存在')
+  }
+
+  // 封装请求参数
+  var r = {
+    url: o.api,
+    method: o.method
+  }
+
+  // if (o.method !== 'GET') r.data = data
+  // else r.params = data
+  if (o.method === 'PATCH' && data && data.id) {
+    r.url = o.api + '/' + data.id
+    r.data = data
+    delete data['id']
+  }
+
+  // 请求
+  return request(r)
+}
+
 // 获取页面列表
 // export function apiIndex(url, params) {
 //   if (!url) {

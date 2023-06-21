@@ -98,8 +98,20 @@ const state = {
   permissionBtn: {},
   btnPage: {
     UserInfo: '/user/info',
-    AdminStore: '/permi/admin/create',
-    AdminUpdate: '/permi/admin/edit'
+    // AdminStore: '/permi/admin/create',
+    // AdminUpdate: '/permi/admin/edit',
+
+    AdminStore: '/client/admin/create',
+    AdminUpdate: '/client/admin/edit',
+    // AdminRecharge: '/client/chargemoney',
+    AdminRecharge: '/client/recharge',
+
+    TipStore: '/sys/tip/create',
+    TipUpdate: '/sys/tip/edit',
+    TipShow: '/sys/tip/detail',
+
+    BannerCreate: '/carousel/banner/create',
+    BannerEdit: '/carousel/banner/edit'
   },
   permissionBtnType: {
   }
