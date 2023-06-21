@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= webpackConfig.name %></title>
+  </head>
+  <body>
+    <script src="https://common.zwwltkl.com/tinymce/plugins/myEmoticons/emo.min.js"></script>
+    <script src="https://common.zwwltkl.com/tinymce/tinymce%404.9.2.min.js"></script>
+    <noscript>
+      <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+      // 移动端页面按手机屏幕分辨率自动缩放的js
+      var phoneWidth = parseInt(window.screen.width);
+      var phoneHeight = parseInt(window.screen.height);
+      var phoneScale = phoneWidth / 750; //除以的值按手机的物理分辨率
+      var ua = navigator.userAgent;
+      if (/Android (\d+\.\d+)/.test(ua)) {
+        var version = parseFloat(RegExp.$1);
+        // andriod 2.3
+        if (version > 2.3) {
+          document.write('<meta name="viewport" content="width=device-width,initial-scale=' + phoneScale +
+            ',minimum-scale=' + phoneScale + ',maximum-scale=' + phoneScale + ',user-scalable=no">');
+          // andriod 2.3以上
+        } else {
+          document.write('<meta name="viewport" content="width=device-width,user-scalable=no">');
+        }
+        // 其他系统
+      } else {
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + phoneScale +
+          ',minimum-scale=' + phoneScale + ',maximum-scale =' + phoneScale + ',user-scalable=no">');
+      }
+    </script>
+</html>

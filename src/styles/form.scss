@@ -1,0 +1,70 @@
+.form-input {
+  width: 300px;
+}
+
+// 颜色下拉框
+.colorBlock {
+  display: inline-block;
+  width: 100%;
+  margin: 2px 0;
+  text-align: center;
+  color: #fff;
+}
+
+.el-select-dropdown__item.selected .colorBlock {
+  color: $fontColorMain;
+}
+.el-form-item__error{
+  font-weight: bold;
+}
+
+.tip-font {
+  color: #ff8484;
+  font-size: $fontSizeExtraExtraSmall;
+  margin-bottom: 20px;
+}
+
+.title-small {
+  line-height: 40px;
+  padding-left: 7px;
+  margin-bottom: 22px;
+  border-left: 5px solid $mainColor;
+  font-weight: bold;
+  background-color: #f5f7fa;
+  color: $fontColorDefault
+}
+
+// 级联选择器
+.el-cascader__search-input{
+  display: none;
+}
+
+// 颜色下拉框
+.colorBlock {
+  display: inline-block;
+  width: 100%;
+  margin: 2px 0;
+  text-align: center;
+  color: #fff;
+}
+
+.el-select-dropdown__item.selected .colorBlock {
+  color: $fontColorMain;
+}
+
+.tip-font {
+  color: $ColorWarning;
+  font-size: $fontSizeExtraExtraSmall;
+  margin-bottom: 20px;
+}
+
+.title-small {
+  line-height: 40px;
+  padding-left: 7px;
+  margin-bottom: 22px;
+  border-left: 5px solid $mainColor;
+  font-weight: bold;
+  background-color: #f5f7fa;
+  color: $fontColorDefault
+}
+  
