@@ -1,6 +1,8 @@
 
 import Vue from 'vue'
-
+import { MessageBox } from 'element-ui'
+import router from '@/router'
+import store from '@/store'
 /**
  * 格式化URL参数
  * @param {string} url
@@ -89,6 +91,19 @@ export function addArrayById(allData, data) {
     }
   }
   addChild(allData, data)
+}
+
+// 将时间戳转化为具体时间
+export function toDates(times) {
+  const date = new Date(times * 1000)
+  const Y = date.getFullYear()
+  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+  const D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
+  const H = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  const Min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  const S = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  const dateTime = Y + '-' + M + '-' + D + ' ' + H + ':' + Min + ':' + S
+  return dateTime
 }
 
 // 遍历数组修改指定元素
@@ -190,4 +205,26 @@ Random.prototype.validate = function(password) {
   } else {
     this.init()
   }
+}
+
+// 删除提示封装
+export function defalultConfirm(msg, callBack, catchBack) {
+  MessageBox.confirm(msg, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    callBack()
+  }).catch(() => {
+    if (catchBack) catchBack()
+  })
+}
+
+// 按钮跳转页面
+export function toRedirect(name, query) {
+  var path = store.getters.btnPage[name]
+  router.push({
+    path,
+    query
+  })
 }

@@ -43,3 +43,20 @@ export function getAreasVersion(param) {
   }
 }
 
+// 活动设置
+export function setActivityStorage(form) {
+  return localStorage.setItem('activity', JSON.stringify(form))
+}
+
+export function getActivityStorage() {
+  if (localStorage.getItem('activity')) {
+    return JSON.parse(localStorage.getItem('activity'))
+  } else {
+    return null
+  }
+}
+
+export function removeActivityStorage(form) {
+  return localStorage.removeItem('activity')
+}
+

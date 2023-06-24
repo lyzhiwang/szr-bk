@@ -36,19 +36,29 @@
         <el-input v-model="rolename" :disabled="true" />
       </el-form-item>
 
-      <!-- 2-运营 3-平台服务商 4-门店 -->
-      <el-form-item v-if="form.role_id===4" label="地区" prop="area_id">
+      <!-- 5代理 -->
+      <el-form-item v-if="form.role_id === 5" label="地区" prop="area_id">
         <el-cascader v-model="userArea" :options="areaList" :props="areaProps" placeholder="请选择用户所在地区" clearable @change="areachange" />
       </el-form-item>
 
-      <el-form-item v-if="form.role_id===3" label="使用时间" prop="time">
+      <!-- 4OEM 5代理 6商家 -->
+      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="使用时间" prop="time">
         <DatePicker :value="form.time || []" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" :has-shortcuts="true" :shortcuts="shortcuts" @changeTime="changeTime" />
       </el-form-item>
 
-      <!-- (form.role_id===3||form.role_id===4||form.role_id===7)&& !id -->
-      <el-form-item v-if="form.role_id === 3 || form.role_id ===4 || form.role_id === 7" label="账号套数" prop="account_number">
-        <el-input-number v-model="form.account_number" :min="0" placeholder="请输入账号套数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
+      <!-- 4OEM 5代理 6商家 -->
+      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="账号套数" prop="account">
+        <el-input-number v-model="form.account" :min="0" placeholder="请输入账号套数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
       </el-form-item>
+      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="视频时长(分钟)" prop="duration">
+        <el-input-number v-model="form.duration" :min="0" placeholder="请输入视频时长(分钟)" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
+      </el-form-item>
+      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="语音次数" prop="voice_number">
+        <el-input-number v-model="form.voice_number" :min="0" placeholder="请输入语音次数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
+      </el-form-item>
+      <!-- <el-form-item v-if="form.role_id === 2 || form.role_id ===4 || form.role_id ===5" label="账号套数" prop="account_number">
+        <el-input-number v-model="form.account_number" :min="0" placeholder="请输入账号套数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
+      </el-form-item> -->
 
       <!-- <el-form-item v-if="form.role_id!==2" label="权益卡数量" prop="card_number">
         <el-input-number v-model="form.card_number" :min="0" placeholder="请输入权益卡数量" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
@@ -59,10 +69,12 @@
 </template>
 
 <script>
-// 超级管理员 可创建 运营
-// 运营 可创建 运营、OEM代理商
-// OEM代理商 可创建 门店
-// 2运营 3OEM 4代理 5财务 6单店 7连锁
+// 超级管理员   可创建  运营 财务
+// 运营         可创建   运营 OEM 代理商
+// OEM         创建    代理商
+// 代理商       可创建  商家
+
+// 1管理员 2运营 3财务 4OEM 5代理 6商家
 
 import { getCity } from '@/utils/area'
 import { validatMixRegular, validatPwdEasy } from '@/utils/validate'
@@ -84,7 +96,12 @@ export default {
           time: [], // 使用时间
           area_id: null,
           // card_number: 0 // 权益卡数量  必须为整数
-          account_number: 0// 必须为整数
+          // account_number: 0// 必须为整数
+
+          account: 0, // 可用账号数
+          duration: 0, // 视频时长(分钟)
+          voice_number: 0 // 语音次数
+
         }
       }
     },
@@ -148,9 +165,13 @@ export default {
         remark: [{ required: true, trigger: 'blur', message: '请设置备注' }],
         role_id: [{ required: true, trigger: 'change', message: '请设置用户角色' }],
         // card_number: [{ required: true, trigger: 'blur', message: '请输入权益卡数量' }],
-        account_number: [{ required: true, trigger: 'blur', message: '请输入账号编号' }],
+        // account_number: [{ required: true, trigger: 'blur', message: '请输入账号编号' }],
         area_id: [{ required: true, trigger: 'change', validator: validateArea }],
-        time: [{ required: true, trigger: 'blur', validator: validateDate }]
+        time: [{ required: true, trigger: 'blur', validator: validateDate }],
+        account: [{ required: true, trigger: 'change', message: '请设置可用账号数' }],
+        duration: [{ required: true, trigger: 'change', message: '请设置视频时长(分钟)' }],
+        voice_number: [{ required: true, trigger: 'change', message: '请设置语音次数' }]
+
       },
 
       areaProps: {

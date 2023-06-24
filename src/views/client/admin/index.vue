@@ -43,9 +43,9 @@
       </template>
 
       <!-- 地区 -->
-      <template v-slot:area="props">
-        <span>{{ props.scope.row[props.scope.column.property] | areaFilter }}</span>
-      </template>
+      <!-- <template v-slot:area_id="props">
+        <span>{{ props.scope.row.area_id | areaFilter }}</span>
+      </template> -->
 
       <!-- 备注 -->
       <template v-slot:remark="props">
@@ -96,8 +96,8 @@
         <span v-else>{{ props.scope.row.area_id | areaFilter }}</span>
       </template>
 
-      <template v-slot:account_number="props">
-        <span>{{ props.scope.row.account_number }}</span>
+      <template v-slot:account="props">
+        <span>{{ props.scope.row.account }}</span>
         <!-- <span v-else>--</span> -->
       </template>
 
@@ -110,9 +110,9 @@
       <template v-slot:operation="props">
         <div class="btn-box">
           <el-button v-has="'AdminUpdate'" type="primary" size="small" @click="toRedirect('AdminUpdate', {id:props.scope.row.id})">编辑</el-button>
-          <el-button v-if="IsEditBindStore(props.scope.row) && props.scope.row.is_bind===false" v-has="'AdminBindStore'" type="primary" plain size="small" @click="BindStore('AdminBindStore', props.scope.row)">绑定商家</el-button>
-          <el-button v-if="IsEditBindStore(props.scope.row)&& props.scope.row.is_bind===true" v-has="'AdminUnbindStore'" type="danger" size="small" @click="UnbindStore('AdminUnbindStore', props.scope.row)">解绑商家</el-button>
-          <el-button v-has="'BlanceChange'" type="success" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">余额变化</el-button>
+          <!-- <el-button v-if="IsEditBindStore(props.scope.row) && props.scope.row.is_bind===false" v-has="'AdminBindStore'" type="primary" plain size="small" @click="BindStore('AdminBindStore', props.scope.row)">绑定商家</el-button> -->
+          <!-- <el-button v-if="IsEditBindStore(props.scope.row)&& props.scope.row.is_bind===true" v-has="'AdminUnbindStore'" type="danger" size="small" @click="UnbindStore('AdminUnbindStore', props.scope.row)">解绑商家</el-button> -->
+          <!-- <el-button v-has="'BlanceChange'" type="success" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">余额变化</el-button> -->
           <el-button v-if="isaccount(props.scope.row)" v-has="'AdminAccountNum'" type="info" size="small" @click="openCover('AdminAccountNum', props.scope.row)">增加账号数</el-button>
           <!-- <el-button v-has="'AccountNumberChange'" size="small" @click="toRedirect('', props.scope.row)">账号数变化</el-button> -->
           <!-- <el-button v-has="'AdminDestroy'" type="danger" size="small" @click="deleteUser('AdminDestroy', props.scope.row)">删除</el-button> -->
@@ -186,10 +186,10 @@ export default {
         { label: '未填写', value: 4 }
       ],
       agentSelect: [], // 下拉选择框、服务
-      selectList: [
-        { id: 7, username: '服务商', children: [] },
-        { id: 8, username: '品牌服务', children: [] }
-      ],
+      // selectList: [
+      //   { id: 7, username: '服务商', children: [] },
+      //   { id: 8, username: '品牌服务', children: [] }
+      // ],
       selectProps: {
         value: 'id',
         label: 'username',
@@ -222,8 +222,7 @@ export default {
 
     //
     isAgent: function() { // 筛选权限：156可以筛选某个服务下的所有门店
-      // 1管理员 5运营 6会计 7服务商 8品牌服务 9门店
-      // 1管理员 2运营 3平台 4服务商 5财务 6单店 7连锁  当前
+      // 1管理员 2运营 3财务 4OEM 5代理 6商家
       const userRole = this.$store.state.user.roles
       const whiteRole = '156'
       if (whiteRole.indexOf(userRole[0]) >= 0) { // 是否展示
@@ -249,17 +248,20 @@ export default {
         // { prop: 'surplus_number', label: '权益卡数量', width: 100, isCustomize: true },
         // { prop: 'already_card_number', label: '已使用权益卡', width: 100, isCustomize: true },
         // { prop: 'balance', label: '余额', width: 100, isCustomize: true },
-        { prop: 'is_bind', label: '绑定状态', width: 80, isCustomize: true },
+        // { prop: 'is_bind', label: '绑定状态', width: 80, isCustomize: true },
+        { prop: 'account', label: '可用账号数', width: 100, isCustomize: true },
+        { prop: 'duration', label: '视频时长(分钟)', width: 100, isCustomize: true },
+        { prop: 'voice_number', label: '语音次数', width: 100, isCustomize: true },
         { prop: 'time', label: '有效期', width: 200, isCustomize: true, sortable: true },
         { prop: 'operation', label: '操作', width: 250, isCustomize: true }
       ]
 
-      if (this.$store.state.user.roles[0] !== 5) {
-        var obj = {
-          prop: 'account_number', label: '可用账号数', width: 100, isCustomize: true
-        }
-        header.push(obj)
-      }
+      // if (this.$store.state.user.roles[0] !== 5) {
+      //   var obj = {
+      //     prop: 'account_number', label: '可用账号数', width: 100, isCustomize: true
+      //   }
+      //   header.push(obj)
+      // }
 
       return header
     }
@@ -449,23 +451,23 @@ export default {
         if (this.isInit) this.isInit = false
       })
     },
-    // 获取下拉选择框中的服务商列表
-    getSelectList() {
-      if (this.isAgent) {
-        for (const item of this.selectList) {
-          const params = {
-            role_id: item.id,
-            size: 100,
-            page: 1
-          }
-          if (!item.children.length) {
-            this.apiBtn('', params).then(res => {
-              item.children = res.data.list
-            })
-          }
-        }
-      }
-    },
+    // // 获取下拉选择框中的服务商列表
+    // getSelectList() {
+    //   if (this.isAgent) {
+    //     for (const item of this.selectList) {
+    //       const params = {
+    //         role_id: item.id,
+    //         size: 100,
+    //         page: 1
+    //       }
+    //       if (!item.children.length) {
+    //         this.apiBtn('', params).then(res => {
+    //           item.children = res.data.list
+    //         })
+    //       }
+    //     }
+    //   }
+    // },
     // 是否显示审核按钮
     showCheck(row) {
       const user = this.$store.state.user.roles[0]

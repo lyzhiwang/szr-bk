@@ -48,12 +48,15 @@ export default {
       form: {
         username: '', // 用户名
         password: '', // 密码
-        role_id: '', // 角色id  2-运营3-OEM服务商4-门店
+        role_id: '', // 角色id  1管理员 2运营 3财务 4OEM 5代理 6商家
         remark: '', // 备注
         time: [],
         area_id: null, //
         // card_number: 0 // 权益卡数量
-        account_number: 0
+        // account_number: 0
+        account: 0, // 可用账号数
+        duration: 0, // 视频时长(分钟)
+        voice_number: 0 // 语音次数
       },
       rolename: '',
       areaList: []
@@ -133,6 +136,8 @@ export default {
           data[item][1] = toDates(data[item][1])
         }
       }
+      console.log('qqqqqqqqqqqq')
+      console.log(data)
       return data
     }
 
