@@ -1,12 +1,17 @@
 <template>
   <div class="generatecard">
-    <el-dialog :visible.sync="isDialogVisible" :title="'增加账号数'" top="7vh" width="750px" @close="close">
+    <el-dialog :visible.sync="isDialogVisible" :title="'资源分配记录'" top="7vh" width="750px" @close="close">
 
       <el-form ref="form" :model="form" :rules="formRules" label-width="200px">
 
-        <el-form-item label="增加账号数" prop="account_number">
-          <!-- <el-input v-model="form.account_number" placeholder="请输入增加账号数" clearable /> -->
-          <el-input-number v-model="form.account_number" placeholder="请输入增加账号数" maxlength="5" :precision="0" :controls="false" clearable />
+        <el-form-item label="资源类型" prop="type">
+          <el-select v-model="form.type" placeholder="请选择资源类型" clearable>
+            <el-option v-for="item in statuOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="form.type===1 ? '增加数量(秒)' : form.type===2 ? '增加数量(次)' :'增加数量(套)'" prop="resources">
+          <el-input-number v-model="form.resources" placeholder="请输入增加账号数" maxlength="5" :precision="0" :controls="false" clearable />
         </el-form-item>
 
         <el-form-item>
@@ -19,7 +24,8 @@
   </div>
 </template>
 <script>
-import { apiBtnTwo } from '@/api/default'
+// import { apiBtnTwo } from '@/api/default'
+import { apiBtn } from '@/api/default'
 import { mapGetters } from 'vuex'
 /**
  *
@@ -41,12 +47,19 @@ export default {
   data() {
     return {
       isDialogVisible: false,
+      statuOptions: [
+        { label: '视频', value: 1 },
+        { label: '语音', value: 2 },
+        { label: '账号', value: 3 }
+      ],
       form: {
         id: '',
-        account_number: '' //
+        type: '', // 资源类型 1视频 2语音 3账号
+        resources: '' // 秒/次/套
       },
       formRules: {
-        account_number: [{ required: true, trigger: 'blur', message: '请填写增加账号数' }]
+        type: [{ required: true, trigger: 'blur', message: '请选择资源类型' }],
+        resources: [{ required: true, trigger: 'blur', message: '请填写增加数量' }]
       }
     }
   },
@@ -82,16 +95,17 @@ export default {
       this.$emit('close', val)
       setTimeout(() => {
         this.form.id = ''
-        this.form.account_number = ''
+        this.form.resources = ''
       }, 10)
     },
 
     // 提交
     submit() {
       console.log(this.form)
+      console.log(this.formateData({ ...this.form }))
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          apiBtnTwo('AdminAccountNum', this.formateData({ ...this.form }))
+          apiBtn('AllocateResources', this.formateData({ ...this.form }))
             .then((res) => {
               this.close(1)
             })
@@ -101,12 +115,16 @@ export default {
 
     // 提交数据校验
     formateData(form) {
+      var params = {}
       if (this.row.id) {
         // this.deleteData(['number'], form)
-        form.id = this.row.id
+        params.user_id = this.row.id
       }
-
-      return form
+      params.type = form.type
+      params.resources = form.resources
+      // console.log('zzzzzzzzzzz')
+      // console.log(form)
+      return params
     },
 
     // 便利删除对象

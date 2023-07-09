@@ -110,10 +110,11 @@
       <template v-slot:operation="props">
         <div class="btn-box">
           <el-button v-has="'AdminUpdate'" type="primary" size="small" @click="toRedirect('AdminUpdate', {id:props.scope.row.id})">编辑</el-button>
+          <el-button v-has="'AllocateResources'" type="info" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">分配资源</el-button>
           <!-- <el-button v-if="IsEditBindStore(props.scope.row) && props.scope.row.is_bind===false" v-has="'AdminBindStore'" type="primary" plain size="small" @click="BindStore('AdminBindStore', props.scope.row)">绑定商家</el-button> -->
           <!-- <el-button v-if="IsEditBindStore(props.scope.row)&& props.scope.row.is_bind===true" v-has="'AdminUnbindStore'" type="danger" size="small" @click="UnbindStore('AdminUnbindStore', props.scope.row)">解绑商家</el-button> -->
           <!-- <el-button v-has="'BlanceChange'" type="success" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">余额变化</el-button> -->
-          <el-button v-if="isaccount(props.scope.row)" v-has="'AdminAccountNum'" type="info" size="small" @click="openCover('AdminAccountNum', props.scope.row)">增加账号数</el-button>
+          <!-- <el-button v-if="isaccount(props.scope.row)" v-has="'AllocateResources'" type="info" size="small" @click="openCover('AllocateResources', props.scope.row)">分配资源</el-button> -->
           <!-- <el-button v-has="'AccountNumberChange'" size="small" @click="toRedirect('', props.scope.row)">账号数变化</el-button> -->
           <!-- <el-button v-has="'AdminDestroy'" type="danger" size="small" @click="deleteUser('AdminDestroy', props.scope.row)">删除</el-button> -->
           <!-- <el-button v-has="'RechargeCard'" type="success" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id,type:'1'})">充值权益卡</el-button> -->
@@ -130,6 +131,7 @@
     <!-- 添加 验证员 -->
     <Binding :is-visible="isCodeVisible" :row="checkedRow" @close="closegeneratecard" />
 
+    <!--  -->
     <CoverDialog :is-visible="isCoverVisible" :row="CoverRow" @close="closeCover" />
   </div>
 </template>
@@ -250,7 +252,7 @@ export default {
         // { prop: 'balance', label: '余额', width: 100, isCustomize: true },
         // { prop: 'is_bind', label: '绑定状态', width: 80, isCustomize: true },
         { prop: 'account', label: '可用账号数', width: 100, isCustomize: true },
-        { prop: 'duration', label: '视频时长(分钟)', width: 100, isCustomize: true },
+        { prop: 'duration', label: '视频时长(秒)', width: 100, isCustomize: true },
         { prop: 'voice_number', label: '语音次数', width: 100, isCustomize: true },
         { prop: 'time', label: '有效期', width: 200, isCustomize: true, sortable: true },
         { prop: 'operation', label: '操作', width: 250, isCustomize: true }
@@ -311,9 +313,9 @@ export default {
 
     //
     isaccount(row) {
-      // 2运营 3平台 4服务 5财务 6单店 7连锁  当前
+      // 1管理员 2运营 3财务 4OEM 5代理 6商家  当前
       // const userRole = this.$store.state.user.roles
-      const whiteRole = '347'
+      const whiteRole = '1245'
       if (whiteRole.indexOf(row.role.id) >= 0) { // 是否展示
         return true
       } else {

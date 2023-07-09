@@ -104,7 +104,8 @@ const state = {
     AdminStore: '/client/admin/create',
     AdminUpdate: '/client/admin/edit',
     // AdminRecharge: '/client/chargemoney',
-    AdminRecharge: '/client/recharge',
+    // AdminRecharge: '/client/recharge',
+    AdminRecharge: '/client/recharge/account',
 
     TipStore: '/sys/tip/create',
     TipUpdate: '/sys/tip/edit',
