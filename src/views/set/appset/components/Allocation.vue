@@ -12,9 +12,9 @@
       <el-form-item label="默认分配视频时长(分钟)">
         <el-input-number v-model="form.duration" placeholder="请输入默认分配视频时长" maxlength="10" :controls="false" clearable :precision="0" />
       </el-form-item>
-      <el-form-item label="默认分配语音次数">
+      <!-- <el-form-item label="默认分配语音次数">
         <el-input-number v-model="form.voice_number" placeholder="请输入默认分配语音次数" maxlength="10" :controls="false" clearable :precision="0" />
-      </el-form-item>
+      </el-form-item> -->
 
       <div class="submit_btn">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -34,8 +34,8 @@ export default {
       form: {
         id: '',
         acount: '', // 默认分配账号套数
-        duration: '', // 默认分配视频时长
-        voice_number: '' // 默认分配语音次数
+        duration: '' // 默认分配视频时长
+        // voice_number: '' // 默认分配语音次数
       },
       formRules: {
         name: [{ required: true, trigger: 'change', message: '请输入名称' }],

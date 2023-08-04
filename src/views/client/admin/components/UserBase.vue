@@ -53,9 +53,9 @@
       <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="视频时长(分钟)" prop="duration">
         <el-input-number v-model="form.duration" :min="0" placeholder="请输入视频时长(分钟)" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
       </el-form-item>
-      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="语音次数" prop="voice_number">
+      <!-- <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="语音次数" prop="voice_number">
         <el-input-number v-model="form.voice_number" :min="0" placeholder="请输入语音次数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
-      </el-form-item>
+      </el-form-item> -->
       <!-- <el-form-item v-if="form.role_id === 2 || form.role_id ===4 || form.role_id ===5" label="账号套数" prop="account_number">
         <el-input-number v-model="form.account_number" :min="0" placeholder="请输入账号套数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
       </el-form-item> -->

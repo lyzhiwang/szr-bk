@@ -33,6 +33,8 @@
 
           <!-- <el-button v-if="hasSelection" v-has="'AgentMigrate'" type="primary" icon="el-icon-connection" @click="moveStore">转移用户</el-button> -->
 
+          <!-- <el-button v-has="'AllocateResources'" type="info" size="small" @click="toRedirect('AdminRecharge', {id:''})">分配资源</el-button> -->
+
           <el-button v-has="'AdminStore'" icon="el-icon-plus" @click="toRedirect('AdminStore')">添加用户</el-button>
         </div>
       </template>
@@ -110,7 +112,9 @@
       <template v-slot:operation="props">
         <div class="btn-box">
           <el-button v-has="'AdminUpdate'" type="primary" size="small" @click="toRedirect('AdminUpdate', {id:props.scope.row.id})">编辑</el-button>
-          <el-button v-has="'AllocateResources'" type="info" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">分配资源</el-button>
+          <!-- <el-button v-has="'AllocateResources'" type="info" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">分配资源</el-button> -->
+          <el-button v-has="'AllocateResources'" type="info" size="small" @click="openCover('AdminRecharge', row)">分配资源</el-button>
+          <!--  -->
           <!-- <el-button v-if="IsEditBindStore(props.scope.row) && props.scope.row.is_bind===false" v-has="'AdminBindStore'" type="primary" plain size="small" @click="BindStore('AdminBindStore', props.scope.row)">绑定商家</el-button> -->
           <!-- <el-button v-if="IsEditBindStore(props.scope.row)&& props.scope.row.is_bind===true" v-has="'AdminUnbindStore'" type="danger" size="small" @click="UnbindStore('AdminUnbindStore', props.scope.row)">解绑商家</el-button> -->
           <!-- <el-button v-has="'BlanceChange'" type="success" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">余额变化</el-button> -->
@@ -133,6 +137,7 @@
 
     <!--  -->
     <CoverDialog :is-visible="isCoverVisible" :row="CoverRow" @close="closeCover" />
+
   </div>
 </template>
 
@@ -253,7 +258,7 @@ export default {
         // { prop: 'is_bind', label: '绑定状态', width: 80, isCustomize: true },
         { prop: 'account', label: '可用账号数', width: 100, isCustomize: true },
         { prop: 'duration', label: '视频时长(秒)', width: 100, isCustomize: true },
-        { prop: 'voice_number', label: '语音次数', width: 100, isCustomize: true },
+        // { prop: 'voice_number', label: '语音次数', width: 100, isCustomize: true },
         { prop: 'time', label: '有效期', width: 200, isCustomize: true, sortable: true },
         { prop: 'operation', label: '操作', width: 250, isCustomize: true }
       ]

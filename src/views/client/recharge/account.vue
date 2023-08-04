@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <ComplexTable :table-header="tableHeader" :table-data="tableData" :has-search="false" :pagination="pagination" :page-name="'账号数变化'" @refreshTable="getList">
+    <ComplexTable :table-header="tableHeader" :table-data="tableData" :has-search="false" :pagination="pagination" :page-name="'资源变化'" @refreshTable="getList">
       <!-- 搜索 -->
       <template v-slot:search>
         <!-- <tip size="big">余额：{{ balance }}(元)</tip> -->
@@ -37,9 +37,9 @@
 
       <template v-slot:btn>
         <div>
-          <el-button v-has="'AllocateResources'" type="default" @click="openCover()">
+          <!-- <el-button v-has="'AllocateResources'" type="default" @click="openCover()">
             分配资源
-          </el-button>
+          </el-button> -->
           <el-button icon="el-icon-refresh" type="default" @click="search">
             刷新
           </el-button>

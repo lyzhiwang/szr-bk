@@ -15,7 +15,7 @@
       </el-form-item>
 
       <el-form-item label="qrcode" prop="qrcode">
-        <FilesManager key="set-qrcode" :value="form.logo" :page-size="8" :type="3" :size="1024" @change="changeqrcode" />
+        <FilesManager key="set-qrcode" :value="form.qrcode" :page-size="8" :type="3" :size="1024" @change="changeqrcode" />
       </el-form-item>
 
       <!-- <el-form-item label="商家提现手续费(%)">

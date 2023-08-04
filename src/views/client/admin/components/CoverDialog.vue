@@ -49,7 +49,7 @@ export default {
       isDialogVisible: false,
       statuOptions: [
         { label: '视频', value: 1 },
-        { label: '语音', value: 2 },
+        // { label: '语音', value: 2 },
         { label: '账号', value: 3 }
       ],
       form: {

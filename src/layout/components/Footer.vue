@@ -1,5 +1,6 @@
 <template>
-  <div class="footer">Copyright 2014-2020 智网网络. All Rights Reserved</div>
+  <!-- <div class="footer">Copyright 2014-2020 智网网络. All Rights Reserved</div> -->
+  <div />
 </template>
 
 <script>

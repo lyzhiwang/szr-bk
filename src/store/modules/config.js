@@ -45,7 +45,9 @@ const actions = {
       if (!params && !state.imgToken) {
         apiBtn('QiniuToken')
           .then(res => {
-            commit('SET_IMG_TOKEN', res.data)
+            // commit('SET_IMG_TOKEN', res.data)
+            commit('SET_IMG_TOKEN', res.data.qiniuToken)
+
             resolve(resolve)
           })
           .catch(res => {
