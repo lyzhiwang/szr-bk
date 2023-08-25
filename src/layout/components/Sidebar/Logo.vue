@@ -14,7 +14,7 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 export default {
   name: 'SidebarLogo',
   props: {
@@ -29,12 +29,24 @@ export default {
       logo: ''
     }
   },
+  computed: {
+    ...mapState({
+      userid: state => state.user.userId
+    })
+  },
   created() {
     // this.apiBtn('SystemQuery', { name: ['project_name', 'peoject_logo'] })
     //   .then((res) => {
     //     this.title = res.data.project_name
     //     this.logo = res.data.peoject_logo
     //   })
+
+    this.apiBtn('SettingsShow', { id: this.userid }).then((res) => {
+      this.title = res.data.name
+      if (res.data.logo.id) {
+        this.logo = res.data.logo.path
+      }
+    })
   }
 }
 </script>

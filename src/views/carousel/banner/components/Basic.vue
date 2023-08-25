@@ -367,8 +367,8 @@ export default {
       // if (form.charge_commission_switch === 0) {
       //   this.deleteData(['charge_commission_ratio'], form)
       // }
-      console.log('qqqqqqqqqqqq')
-      console.log(params)
+      // console.log('qqqqqqqqqqqq')
+      // console.log(params)
       return params
     },
 

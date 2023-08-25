@@ -26,6 +26,9 @@ import '@/common/mixin'
 import * as filters from '@/common/filter' // global filters
 import has from '@/utils/btnAuthority'
 
+import _ from 'lodash'
+Vue.prototype._ = _
+
 // 带有灰色底的标题
 import Tip from '@/components/Tool/Tip'
 import Pagination from '@/components/Pagination'

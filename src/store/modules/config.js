@@ -8,6 +8,7 @@ const state = {
   upload_url: '', // 上传地址
   imgToken: null, // 上传图片时，携带的token
   audioToken: null, // 上传音乐
+  aliToken: null, // 阿里token
   // 角色列表
   roleList: [],
   review_location: 'https://qr.zwmstk.cn/review', // 前台H5页面核销地址
@@ -29,6 +30,9 @@ const mutations = {
     state.auto_open = upload.open ? Number(upload.open) : 0
     state.upload_url = upload.open ? upload.qiniu_url : upload.local_url
     state.local_url = upload.local_url
+  },
+  SET_ALI_TOKEN(state, token) {
+    state.aliToken = token
   }
 }
 
@@ -78,6 +82,27 @@ const actions = {
         .catch(err => {
           reject(err)
         })
+    })
+  },
+
+  // 获取阿里token
+  GetAliToken({ commit, state }, params) {
+    return new Promise((resolve, reject) => {
+      // 上传至本地状态下 不再请求阿里接口
+      if (state.auto_open === 0) {
+        resolve()
+        return
+      }
+      if (!params && !state.aliToken) {
+        apiBtn('AliToken')
+          .then(res => {
+            commit('SET_ALI_TOKEN', res.data)
+            resolve(resolve)
+          })
+          .catch(res => {
+            reject(res)
+          })
+      }
     })
   }
 }

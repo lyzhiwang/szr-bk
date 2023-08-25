@@ -37,7 +37,7 @@
       </el-form-item>
 
       <!-- 5代理 -->
-      <el-form-item v-if="form.role_id === 5" label="地区" prop="area_id">
+      <el-form-item v-if="!id && form.role_id === 5" label="地区" prop="area_id">
         <el-cascader v-model="userArea" :options="areaList" :props="areaProps" placeholder="请选择用户所在地区" clearable @change="areachange" />
       </el-form-item>
 
@@ -47,12 +47,12 @@
       </el-form-item>
 
       <!-- 4OEM 5代理 6商家 -->
-      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="账号套数" prop="account">
+      <!-- <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="账号套数" prop="account">
         <el-input-number v-model="form.account" :min="0" placeholder="请输入账号套数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
-      </el-form-item>
-      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="视频时长(分钟)" prop="duration">
+      </el-form-item> -->
+      <!-- <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="视频时长(分钟)" prop="duration">
         <el-input-number v-model="form.duration" :min="0" placeholder="请输入视频时长(分钟)" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
-      </el-form-item>
+      </el-form-item> -->
       <!-- <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="语音次数" prop="voice_number">
         <el-input-number v-model="form.voice_number" :min="0" placeholder="请输入语音次数" :disabled="form.id>=0" :controls="false" clearable :precision="0" />
       </el-form-item> -->
@@ -94,13 +94,13 @@ export default {
           remark: '', // 备注
           role_id: '', // 角色 id
           time: [], // 使用时间
-          area_id: null,
+          area_id: null
           // card_number: 0 // 权益卡数量  必须为整数
           // account_number: 0// 必须为整数
 
-          account: 0, // 可用账号数
-          duration: 0, // 视频时长(分钟)
-          voice_number: 0 // 语音次数
+          // account: 0, // 可用账号数
+          // duration: 0, // 视频时长(分钟)
+          // voice_number: 0 // 语音次数
 
         }
       }

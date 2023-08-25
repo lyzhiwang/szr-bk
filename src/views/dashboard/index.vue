@@ -69,8 +69,8 @@ export default {
     getlist() {
       apiBtn('Dashboard').then((res) => {
         // console.log('获取列表数据')
-        // console.log(res)
-        // this.statisticsdata = res.data
+        console.log(res)
+        this.statisticsdata = res.data
       })
     }
 

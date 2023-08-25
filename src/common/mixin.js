@@ -65,6 +65,33 @@ Vue.mixin({
         if (catchBack) catchBack()
       })
     },
+
+    // 获取文件类型
+    getFileName(number) {
+      const fileType = {
+        1: 'img', // 图片
+        2: 'video', // 完整视频
+        3: 'video', // 素材视频
+        4: 'audio', // 配音
+        5: 'audio', // BGM
+        6: 'img', // 图片 自定义海报
+        8: 'text', // 字幕
+        9: 'img', // 图片 视频素材图片
+        10: 'video', // 片头
+        11: 'audio', // 背景音乐库
+        12: 'img',
+        13: 'audio' // 配音和字幕
+      }
+      return fileType[number]
+    },
+
+    // 获取任意长度的随机数字字母组合字符串 @param {*} len 随机字符串的长度
+    randomString(len) {
+      // console.log(len, 'mixinleng')
+      const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      return this._.sampleSize(charSet, len).toString().replace(/,/g, '')
+    },
+
     // 通过path跳转
     toRedirect(name, query) {
       var path = store.getters.btnPage[name]

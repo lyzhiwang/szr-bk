@@ -112,7 +112,10 @@ const state = {
     TipShow: '/sys/tip/detail',
 
     BannerCreate: '/carousel/banner/create',
-    BannerEdit: '/carousel/banner/edit'
+    BannerEdit: '/carousel/banner/edit',
+
+    SvbgCreate: '/carousel/svbg/create',
+    SvbgEdit: '/carousel/svbg/edit'
   },
   permissionBtnType: {
   }

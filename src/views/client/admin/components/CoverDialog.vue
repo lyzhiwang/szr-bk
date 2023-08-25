@@ -10,7 +10,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="form.type===1 ? '增加数量(秒)' : form.type===2 ? '增加数量(次)' :'增加数量(套)'" prop="resources">
+        <el-form-item :label="form.type===3 ? '增加数量(套)' : form.type===2 ? '增加数量(次)' :'增加数量(秒)'" prop="resources">
           <el-input-number v-model="form.resources" placeholder="请输入增加账号数" maxlength="5" :precision="0" :controls="false" clearable />
         </el-form-item>
 
@@ -47,11 +47,11 @@ export default {
   data() {
     return {
       isDialogVisible: false,
-      statuOptions: [
-        { label: '视频', value: 1 },
-        // { label: '语音', value: 2 },
-        { label: '账号', value: 3 }
-      ],
+      // statuOptions: [
+      //   { label: '视频', value: 1 },
+      //   // { label: '语音', value: 2 },
+      //   { label: '账号', value: 3 }
+      // ],
       form: {
         id: '',
         type: '', // 资源类型 1视频 2语音 3账号
@@ -66,7 +66,25 @@ export default {
   computed: {
     ...mapGetters([
       'userId'
-    ])
+    ]),
+
+    // statuOptions: [
+    //     { label: '视频', value: 1 },
+    //     // { label: '语音', value: 2 },
+    //     { label: '账号', value: 3 }
+    //   ],
+    statuOptions() {
+      const list = [
+        { label: '时长', value: 1 }
+      ]
+
+      if (this.row.role_id !== 6) {
+        var obj = { label: '账号', value: 3 }
+        list.push(obj)
+      }
+
+      return list
+    }
   },
   watch: {
     //
@@ -94,7 +112,8 @@ export default {
     close(val) {
       this.$emit('close', val)
       setTimeout(() => {
-        this.form.id = ''
+        this.form.user_id = ''
+        this.form.type = ''
         this.form.resources = ''
       }, 10)
     },

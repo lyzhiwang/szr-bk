@@ -113,7 +113,7 @@
         <div class="btn-box">
           <el-button v-has="'AdminUpdate'" type="primary" size="small" @click="toRedirect('AdminUpdate', {id:props.scope.row.id})">编辑</el-button>
           <!-- <el-button v-has="'AllocateResources'" type="info" size="small" @click="toRedirect('AdminRecharge', {id:props.scope.row.id})">分配资源</el-button> -->
-          <el-button v-has="'AllocateResources'" type="info" size="small" @click="openCover('AdminRecharge', row)">分配资源</el-button>
+          <el-button v-has="'AllocateResources'" type="info" size="small" @click="openCover('AdminRecharge', props.scope.row)">分配资源</el-button>
           <!--  -->
           <!-- <el-button v-if="IsEditBindStore(props.scope.row) && props.scope.row.is_bind===false" v-has="'AdminBindStore'" type="primary" plain size="small" @click="BindStore('AdminBindStore', props.scope.row)">绑定商家</el-button> -->
           <!-- <el-button v-if="IsEditBindStore(props.scope.row)&& props.scope.row.is_bind===true" v-has="'AdminUnbindStore'" type="danger" size="small" @click="UnbindStore('AdminUnbindStore', props.scope.row)">解绑商家</el-button> -->
