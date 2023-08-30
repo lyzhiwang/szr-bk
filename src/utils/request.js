@@ -44,7 +44,7 @@ const service = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'type': '1', // 1后台2桌面端
-    'oemid': '17' // oemid  本地：2  17：安馨康达
+    'oemid': '2' // oemid  本地：2  17：安馨康达
   }
 })
 

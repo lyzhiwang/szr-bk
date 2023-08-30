@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
 
-    <complex-table :page-name="'背景图设置列表'" :table-header="tableHeader" :table-data="tableData" :has-pagination="false" :has-search="false" @refreshTable="getList">
+    <complex-table :page-name="'背景图设置列表'" :pagination="pagination" :table-header="tableHeader" :table-data="tableData" :has-search="false" @refreshTable="getList">
 
       <!-- 创建 -->
       <template v-slot:btn>
@@ -104,27 +104,27 @@ export default {
       'roles'
     ])
   },
-  watch: {
-    formSearch: {
-      deep: true,
-      handler(newVal, oldVal) {
-        this.getList()
-        this.$store.commit('SearchUpdate', { name: 'svbg', key: 'formSearch', value: newVal })
-      }
-    },
-    otherSearch: {
-      deep: true,
-      handler(newVal, oldVal) {
-        this.$store.commit('SearchUpdate', { name: 'svbg', key: 'otherSearch', value: newVal })
-      }
-    },
-    pagination: {
-      deep: true,
-      handler(newVal, oldVal) {
-        this.$store.commit('SearchUpdate', { name: 'svbg', key: 'pagination', value: newVal })
-      }
-    }
-  },
+  // watch: {
+  //   formSearch: {
+  //     deep: true,
+  //     handler(newVal, oldVal) {
+  //       this.getList()
+  //       this.$store.commit('SearchUpdate', { name: 'svbg', key: 'formSearch', value: newVal })
+  //     }
+  //   },
+  //   otherSearch: {
+  //     deep: true,
+  //     handler(newVal, oldVal) {
+  //       this.$store.commit('SearchUpdate', { name: 'svbg', key: 'otherSearch', value: newVal })
+  //     }
+  //   },
+  //   pagination: {
+  //     deep: true,
+  //     handler(newVal, oldVal) {
+  //       this.$store.commit('SearchUpdate', { name: 'svbg', key: 'pagination', value: newVal })
+  //     }
+  //   }
+  // },
 
   created() {
     this.getList()
@@ -177,7 +177,7 @@ export default {
       this.apiBtn('ShortvideobackgroundIndex', this.removeProperty(params))
         .then((res) => {
           this.tableData = res.data
-          // this.pagination.total = res.meta.total
+          this.pagination.total = res.meta.total
         })
     }
   }

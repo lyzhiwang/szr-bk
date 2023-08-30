@@ -77,7 +77,7 @@
 // 1管理员 2运营 3财务 4OEM 5代理 6商家
 
 import { getCity } from '@/utils/area'
-import { validatMixRegular, validatPwdEasy } from '@/utils/validate'
+import { validatEnRegular, validatPwdEasy } from '@/utils/validate'
 import { Random } from '@/utils/index.js'
 import DatePicker from '@/components/Tool/DatePicker'
 
@@ -139,7 +139,7 @@ export default {
       }
     }
     const validateUsername = (rule, val, callback) => {
-      if (val && val.length >= 5 && val.length <= 16 && validatMixRegular(val)) {
+      if (val && val.length >= 5 && val.length <= 16 && validatEnRegular(val)) {
         callback()
       } else {
         callback(new Error('用户名只能是数字或字母，长度为5-16位'))
