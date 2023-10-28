@@ -25,6 +25,9 @@
       <el-form-item label="备注" prop="remark">
         <el-input v-model="form.remark" maxlength="10" clearable />
       </el-form-item>
+      <el-form-item v-if="id" label="密码">
+        <el-input v-model="form.password" :placeholder="pwdPlaceholder" clearable />
+      </el-form-item>
 
       <el-form-item v-if="!id" label="角色" prop="role_id">
         <el-select v-model="form.role_id" :disabled="checkRole(['agent'])" placeholder="请设置该用户角色" clearable>

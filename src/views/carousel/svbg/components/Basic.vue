@@ -25,7 +25,7 @@
 
       <template>
         <el-form-item label="图片" prop="image">
-          <UploadAli :type="9" :list="form.image" :limit="1" @change="changeimg" @delete="removeimg" />
+          <UploadAli :type="12" :list="form.image" :limit="1" @change="changeimg" @delete="removeimg" />
         </el-form-item>
       </template>
 

@@ -5,7 +5,7 @@
         <el-card class="box-card">
           <user-password ref="passwordChild" :form="passwordData" />
           <el-button
-            v-has="'AdminPatch'"
+            v-has="'ResetPassword'"
             type="primary"
             style="margin-left:251px"
             @click="passwordSubmit"
