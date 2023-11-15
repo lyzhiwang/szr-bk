@@ -7,36 +7,32 @@
       label-position="right"
       label-width="251px"
     >
-      <tip :title="disabled ? '修改背景图' : '添加背景图'" />
+      <tip :title="disabled ? '修改数字人' : '添加数字人'" />
 
-      <el-form-item label="背景图类型" prop="type">
-        <el-radio-group v-model="form.type">
-          <el-radio :label="1">纯色</el-radio>
-          <el-radio :label="2">普通</el-radio>
-        </el-radio-group>
+      <el-form-item label="数字人名称" prop="name">
+        <el-input v-model="form.name" clearable />
       </el-form-item>
 
-      <el-form-item label="屏幕方向" prop="screen">
-        <el-radio-group v-model="form.screen">
-          <el-radio :label="1">竖屏</el-radio>
-          <el-radio :label="2">横屏</el-radio>
-        </el-radio-group>
+      <el-form-item label="数字人ID" prop="human_id">
+        <el-input v-model="form.human_id" clearable />
       </el-form-item>
 
       <template>
-        <el-form-item label="图片" prop="image">
-          <UploadAli :type="12" :list="form.image" :limit="1" @change="changeimg" @delete="removeimg" />
+        <el-form-item label="数字人形象" prop="image">
+          <UploadAli :type="9" :list="form.image" :limit="1" @change="changeimg" @delete="removeimg" />
         </el-form-item>
       </template>
 
-      <el-form-item label="排序" prop="sort">
-        <el-input v-model="form.sort" clearable />
+      <el-form-item label="是否公开" prop="public">
+        <el-radio-group v-model="form.public">
+          <el-radio :label="0">否</el-radio>
+          <el-radio :label="1">是</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <div class="tip-font">数值越大排序越靠前</div>
 
       <div class="submit_btn">
         <el-button @click="cancel">取消</el-button>
-        <el-button type="primary" @click=" submititem( disabled ? 'ShortvideobackgroundUpdate' : 'ShortvideobackgroundStore' )">
+        <el-button type="primary" @click=" submititem( disabled ? 'HumansUpdate' : 'HumansStore' )">
           提交
         </el-button>
       </div>
@@ -52,31 +48,32 @@ export default {
   components: { UploadAli },
   data() {
     const validatePic = (rule, val, callback) => {
+      // if (this.form.image && this.form.image && this.form.image.path && this.form.image.id) {
+      //   callback()
+      // } else {
+      //   callback(new Error('请上传图片'))
+      // }
       if (this.form.image && this.form.image[0] && this.form.image[0].path && this.form.image[0].id) { callback() } else callback(new Error('请上传图片'))
     }
     return {
       disabled: !!this.$route.query.image_id,
       form: {
         id: '',
-        screen: 1, //    屏幕方向 1竖屏 2横屏
+        human_id: '',
+        name: '',
+        public: null,
         image: [
           // {
           //   id: '', // 图片id
           //   path: '' // 图片地址
           // }
-        ],
-        type: 1, // 类型 1纯色 2普通
-        bg_id: '', // 背景图id (上传到阿里云)
-        sort: 100 // 排序值
+        ]
       },
 
       formRules: {
-        bg_id: [{ required: true, trigger: 'change', message: '请上传背景图片' }],
-        screen: [{ required: true, trigger: 'change', message: '请选择屏幕方向' }],
-        type: [{ required: true, trigger: 'change', message: '请选择背景类型' }],
-        sort: [
-          { required: true, trigger: 'change', message: '请输入商品排序权重' }
-        ],
+        name: [{ required: true, trigger: 'change', message: '请输入数字人名称' }],
+        human_id: [{ required: true, trigger: 'change', message: '请输入数字人id' }],
+        public: [{ required: true, trigger: 'change', message: '请选择是否公开' }],
         image: [{ required: true, trigger: 'change', validator: validatePic }]
       }
     }
@@ -101,8 +98,8 @@ export default {
 
     // 获取图片
     changeimg(val) {
-      // console.log('获取图片')
-      // console.log(val)
+      console.log('获取图片')
+      console.log(val)
       var obj = {}
       obj.id = val.id
       obj.path = val.path
@@ -124,16 +121,17 @@ export default {
 
     // 获取详情
     getDetail(id) {
-      // platform_type: this.platform_type
-      this.apiBtn('ShortvideobackgroundShow', {
+      this.apiBtn('HumansDetail', {
         id: id
       }).then((res) => {
+        // this.form = res.data
         this.form.id = res.data.id
-        this.form.sort = res.data.sort
-        this.form.bg_id = res.data.bg_id
-        this.form.type = res.data.type
-        this.form.screen = res.data.screen
-        this.form.image.push(res.data.bg)
+        this.form.human_id = res.data.human_id
+        this.form.name = res.data.name
+        this.form.public = res.data.public
+        if (res.data.image) {
+          this.form.image.push(res.data.image)
+        }
       })
     },
 
@@ -147,7 +145,6 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.apiBtn(name, this.formateData({ ...this.form })).then((res) => {
-            // console.log(res)
             this.cancel()
           })
         } else {
@@ -163,10 +160,11 @@ export default {
       if (form.id) {
         params.id = form.id
       }
-      params.sort = form.sort
-      params.screen = this.form.screen
-      params.bg_id = form.image[0].id
-      params.type = this.form.type
+      params.human_id = form.human_id
+      params.name = this.form.name
+      // params.image = form.image.id
+      params.image = form.image[0].id
+      params.public = this.form.public
 
       // if (form.charge_commission_switch === 0) {
       //   this.deleteData(['charge_commission_ratio'], form)

@@ -80,7 +80,9 @@ Vue.mixin({
         10: 'video', // 片头
         11: 'audio', // 背景音乐库
         12: 'img',
-        13: 'audio' // 配音和字幕
+        13: 'audio', // 配音和字幕
+        19: 'exe', // 安装包
+        20: 'audio' // 音频
       }
       return fileType[number]
     },

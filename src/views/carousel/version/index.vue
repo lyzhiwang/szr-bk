@@ -1,31 +1,13 @@
 <template>
   <div class="app-container">
 
-    <complex-table :page-name="'背景图列表'" :pagination="pagination" :table-header="tableHeader" :table-data="tableData" :has-search="false" @refreshTable="getList">
+    <complex-table :page-name="'版本列表'" :pagination="pagination" :table-header="tableHeader" :table-data="tableData" :has-search="false" @refreshTable="getList">
 
       <!-- 创建 -->
       <template v-slot:btn>
         <div>
-          <el-button v-has="'ShortvideobackgroundStore'" type="primary" icon="el-icon-plus" @click="toRedirect('SvbgCreate')">添加背景图</el-button>
+          <el-button v-has="'VersionsStore'" type="primary" icon="el-icon-plus" @click="toRedirect('VersionCreate')">添加版本</el-button>
         </div>
-      </template>
-
-      <!-- 分类 -->
-      <template v-slot:type="props">
-        <span>{{ props.scope.row.type | typeFilter }}</span>
-      </template>
-
-      <!-- 图片位置 -->
-      <template v-slot:screen="props">
-        <span>{{ props.scope.row.screen | screenFilter }}</span>
-      </template>
-
-      <!-- 图片 -->
-      <template v-slot:bg="props">
-        <div v-if="props.scope.row && props.scope.row.bg">
-          <img :src="props.scope.row.bg.path" style="width: 70px;height: 70px;text-align: center;" alt="">
-        </div>
-        <div v-else />
       </template>
 
       <!-- 是否使用 -->
@@ -37,8 +19,9 @@
 
       <template v-slot:operation="props">
         <div class="btn-box">
-          <el-button v-has="'ShortvideobackgroundUpdate'" type="primary" size="small" @click="toRedirect('SvbgEdit', {image_id:props.scope.row.id})">编辑</el-button>
-          <el-button v-has="'ShortvideobackgroundDestroy'" type="danger" size="small" @click="deleteitem('ShortvideobackgroundDestroy', props.scope.row)">删除</el-button>
+          <el-button v-has="'VersionsUpdate'" type="primary" size="small" @click="toRedirect('VersionEdit', {version_id:props.scope.row.id})">编辑</el-button>
+          <el-button v-has="'VersionsDestroy'" type="danger" size="small" @click="deleteitem('VersionsDestroy', props.scope.row)">删除</el-button>
+          <el-button type="info" size="small" @click="downloaditem(props.scope.row)">下载</el-button>
         </div>
       </template>
 
@@ -52,24 +35,6 @@ import ComplexTable from '@/components/Table/ComplexTable'
 import { deleteArrayById } from '@/utils/index'
 export default {
   name: '',
-  filters: {
-    // 图片类型
-    typeFilter: function(val) {
-      const obj = {
-        1: '纯色',
-        2: '普通'
-      }
-      return obj[val]
-    },
-    // 屏幕方向
-    screenFilter: function(val) {
-      const obj = {
-        1: '竖屏',
-        2: '横屏'
-      }
-      return obj[val]
-    }
-  },
   components: { ComplexTable },
   data() {
     return {
@@ -82,11 +47,10 @@ export default {
       },
       tableHeader: [ //  表格 表头
         { prop: 'id', label: 'ID', isCustomize: true, width: 80 },
-        // { prop: 'name', label: '标题', isCustomize: true },
-        { prop: 'bg', label: '图片', isCustomize: true },
-        { prop: 'type', label: '分类', isCustomize: true },
-        { prop: 'screen', label: '屏幕方向', isCustomize: true },
-        // { prop: 'is_show', label: '是否使用', isCustomize: true },
+        { prop: 'name', label: '名称', isCustomize: true },
+        { prop: 'oem_id', label: 'OEM', isCustomize: true },
+        { prop: 'version', label: '版本号', isCustomize: true },
+        { prop: 'created_at', label: '时间', isCustomize: true },
         { prop: 'operation', label: '操作', isCustomize: true, width: '250' }
       ],
       tableData: [], // 数据
@@ -138,7 +102,7 @@ export default {
 
     // 删除指定
     deleteitem(name, row) {
-      const msg = '此操作将删除 ' + row.id
+      const msg = '此操作将删除 ' + row.name + '(' + row.id + ')'
       const callBack = () => {
         this.apiBtn(name, { id: row.id })
           .then(res => {
@@ -174,11 +138,22 @@ export default {
     // 获取列表
     getList() {
       const params = { ...this.formSearch, ...this.otherSearch, ...this.pagination }
-      this.apiBtn('ShortvideobackgroundIndex', this.removeProperty(params))
+      this.apiBtn('VersionsIndex', this.removeProperty(params))
         .then((res) => {
           this.tableData = res.data
           this.pagination.total = res.meta.total
         })
+    },
+
+    // 下载安装包
+    downloaditem(item) {
+      // console.log(item.file.path)
+      if (item.file && item.file.path) {
+        window.open(item.file.path)
+      } else {
+        this.$message.error('文件下载失败！')
+      }
+      // this.$message.error('文件下载失败！')
     }
   }
 }

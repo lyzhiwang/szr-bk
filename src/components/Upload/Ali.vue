@@ -14,12 +14,27 @@
         12: 'img',
         13: 'audio' // 配音和字幕 -->
     <!-- 音频 待优化 -->
-    <div v-if="type === 4 || type === 5 || type === 11 || type === 13" class="music">
-      <el-input v-model="list.length" disabled clearable placeholder="请设置音乐">
+    <div v-if="type === 4 || type === 5 || type === 11 || type === 13|| type === 19 || type === 20 " class="music">
+      <!-- <el-input v-for="(item,index) in list" :key="index" v-model="item.name" disabled clearable placeholder="请设置音频">
         <template #append>
           <el-button :disabled="disabled" @click="toggleDialog">选择文件</el-button>
         </template>
-      </el-input>
+      </el-input> -->
+      <template v-if="list.length > 0">
+        <el-input v-for="(item,index) in list" :key="index" v-model="item.name" disabled clearable placeholder="请设置文件">
+          <template #append>
+            <el-button :disabled="disabled" @click="toggleDialog">选择文件</el-button>
+          </template>
+        </el-input>
+      </template>
+
+      <template v-else>
+        <el-input :v-model="temporary" disabled clearable placeholder="请设置文件">
+          <template #append>
+            <el-button :disabled="disabled" @click="toggleDialog">选择文件</el-button>
+          </template>
+        </el-input>
+      </template>
     </div>
 
     <!-- 图片 -->
@@ -55,7 +70,7 @@
 
       <div class="content">
         <!-- 音乐 -->
-        <template v-if="(type === 4 || type === 5 || type === 11 || type === 13) && fileList && fileList.length">
+        <template v-if="(type === 4 || type === 5 || type === 11 || type === 13 || type === 19 || type === 20 ) && fileList && fileList.length">
           <div v-for="(item, index) in fileList" :key="index" :class="['img-box', 'music', select.index === index ? 'img-box-border' : '']" @dblclick="changeItem(item, index)" @touchend="changeItem(item, index)" @mouseover="mouserOver(item, index)">
             <p :title="item.name" class="ellipsis">{{ item.name }}</p>
             <p>{{ item.created_at | parseTime('{y}-{m}-{d} {h}:{i}') }}</p>
@@ -106,7 +121,7 @@
 
       <!-- 翻页 -->
       <div class="foot">
-        <!-- :data="params" :headers="headers" :on-change="changeUpload"            :on-exceed="handleExceed"-->
+        <!-- :data="params" :headers="headers" :on-change="changeUpload"  :on-exceed="handleExceed"-->
         <el-upload
           :id="uploadId"
           ref="upload"
@@ -156,8 +171,12 @@ export default {
     // 9: 'img', // 图片 视频素材图片
     // 10: 'video', // 片头
     // 11: 'audio', // 背景音乐库
-    // 12: 'img',
+    // 12: 'img',// 短视频  背景图
     // 13: 'audio' // 配音和字幕
+    //
+    // 19: 'exe' // 安装包
+    // 20:'audio',//音频
+
     type: {
       // 文件类型
       type: Number,
@@ -245,7 +264,9 @@ export default {
       fileListId: [],
       dialogVisible: false,
       previewSrc: '',
-      uploadId: 'upload' + new Date().getTime()
+      uploadId: 'upload' + new Date().getTime(),
+
+      temporary: '' // 临时
     }
   },
 
@@ -290,9 +311,10 @@ export default {
     // 组件使用允许上传的文件类型
     accept() {
       const accept = {
-        audio: 'audio/mp3,audio/mpeg',
+        audio: 'audio/mp3,audio/mpeg,audio/wav',
         video: 'video/mp4',
-        img: 'image/png, image/jpeg, image/jpg'
+        img: 'image/png, image/jpeg, image/jpg',
+        exe: 'application/x-msdownload'
       }
       return accept[this.fileType]
     },
@@ -300,9 +322,10 @@ export default {
     // 校验使用允许上传的文件类型
     acceptList() {
       const acceptList = {
-        audio: ['audio/mp3', 'audio/mpeg'],
+        audio: ['audio/mp3', 'audio/mpeg', 'audio/wav'],
         video: ['video/mp4'],
-        img: ['image/png', 'image/jpeg', 'image/jpg']
+        img: ['image/png', 'image/jpeg', 'image/jpg'],
+        exe: ['application/x-msdownload']
       }
       return acceptList[this.fileType]
     },
@@ -312,7 +335,8 @@ export default {
       const messageType = {
         audio: '上传音乐只能是 mp3 或 mpeg 格式',
         video: '上传视频只能是 mp4 格式,建议上传1080p',
-        img: '上传图片只能是 JPG 或 PNG 格式'
+        img: '上传图片只能是 JPG 或 PNG 格式',
+        exe: '上传文件只能是 x-msdownload 格式'
       }
       return messageType[this.fileType]
     },
@@ -420,10 +444,13 @@ export default {
 
     // 选中文件
     changeItem(item, index) {
-      if (this.value_id.indexOf(item.id) >= 0) {
-        this.$message('请勿重复选择')
-        return
-      }
+      // console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqq')
+      // console.log(item)
+      // if (this.value_id.indexOf(item.id) >= 0) {
+      //   this.$message('请勿重复选择')
+      //   return
+      // }
+
       this.$emit('change', item)
       if (item && item.id && item.path && item.name) this.toggleDialog()
     },
@@ -435,7 +462,7 @@ export default {
     //
     // hover浮动
     mouserOver(item, index) {
-    //   this.hover = { item: item, index: index }
+      //   this.hover = { item: item, index: index }
       this.select = { item: item, index: index }
     },
     // hover浮动移除
@@ -478,7 +505,7 @@ export default {
 
     // 上传前的回调
     beforeUpload(file) {
-    //   console.log(file, '上传前')
+      // console.log(file, '上传前')
       // 是否是允许类型
       const isAcceptType = this.acceptList.includes(file.type)
       // 是否小于指定大小

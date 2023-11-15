@@ -115,7 +115,16 @@ const state = {
     BannerEdit: '/carousel/banner/edit',
 
     SvbgCreate: '/carousel/svbg/create',
-    SvbgEdit: '/carousel/svbg/edit'
+    SvbgEdit: '/carousel/svbg/edit',
+
+    SzrCreate: '/carousel/szr/create',
+    SzrEdit: '/carousel/szr/edit',
+
+    VersionCreate: '/carousel/version/create',
+    VersionEdit: '/carousel/version/edit',
+
+    TimbreCreate: '/carousel/timbre/create',
+    TimbreEdit: '/carousel/timbre/edit'
   },
   permissionBtnType: {
   }
