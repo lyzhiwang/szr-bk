@@ -18,7 +18,7 @@
 
       <template>
         <el-form-item label="文件" prop="file_id">
-          <UploadAli :type="19" :list="form.file_id" :limit="1" :size-limit="1024000" @change="changeimg" @delete="removeimg" />
+          <UploadAli :type="19" :list="form.file_id" :limit="1" :size-limit="1024000" :page-size="16" @change="changeimg" @delete="removeimg" />
         </el-form-item>
       </template>
 

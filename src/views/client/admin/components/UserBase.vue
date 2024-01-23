@@ -40,12 +40,12 @@
       </el-form-item>
 
       <!-- 5代理 -->
-      <el-form-item v-if="!id && form.role_id === 5" label="地区" prop="area_id">
+      <el-form-item v-if="!id && form.role_id === 5 || form.role_id === 7" label="地区" prop="area_id">
         <el-cascader v-model="userArea" :options="areaList" :props="areaProps" placeholder="请选择用户所在地区" clearable @change="areachange" />
       </el-form-item>
 
       <!-- 4OEM 5代理 6商家 -->
-      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6" label="使用时间" prop="time">
+      <el-form-item v-if="form.role_id === 4 || form.role_id === 5 || form.role_id === 6 || form.role_id === 7" label="使用时间" prop="time">
         <DatePicker :value="form.time || []" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" :has-shortcuts="true" :shortcuts="shortcuts" @changeTime="changeTime" />
       </el-form-item>
 
@@ -78,6 +78,8 @@
 // 代理商       可创建  商家
 
 // 1管理员 2运营 3财务 4OEM 5代理 6商家
+
+// 7 分销  权限 等于  5  代理
 
 import { getCity } from '@/utils/area'
 import { validatEnRegular, validatPwdEasy } from '@/utils/validate'
